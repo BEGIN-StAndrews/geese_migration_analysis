@@ -1,0 +1,7 @@
+*.Rproj
+.Rhistory
+.RData
+.DS_Store
+__pycache__/
+*.log
+*.tmp
