@@ -25,8 +25,8 @@
 if (!requireNamespace("lubridate", quietly = TRUE)) install.packages("lubridate")
 if (!requireNamespace("maptools", quietly = TRUE)) install.packages("maptools", repos = "http://R-Forge.R-project.org")
 
-library(lubridate)  # For date-time operations
-library(maptools)   # For dawn/dusk calculations using the `crepuscule` function
+library(lubridate)  
+library(maptools)   
 
 # ------------------------------------------------------------------------------
 # Step 1: Load Tracking Data

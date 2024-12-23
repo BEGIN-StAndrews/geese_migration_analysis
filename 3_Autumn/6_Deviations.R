@@ -11,16 +11,8 @@
 # 
 # Input:
 #   - Processed tracking dataset with clustering features: 'Autumn_ClusteringFeatures.csv'.
-#   - Stopover dataset: 'Stopovers.csv'.
+#   - Stopover dataset: 'Stopovers.csv'.      # This dataset is produced during preprocessing.
 
-# Note: 
-# The annotated datasets ('Autumn_Migration_Annotated.csv' and 'Spring_Migration_Annotated.csv')
-# along with identified 'Stopovers' are available in the Movebank study: 'Tracks of greater white-fronted
-# geese annotated with geomagnetic and environmental information.' 
-# Refer to the Movebank Data Repository for access details and the published paper 
-# 'Multi-modal, interrelated navigation in migratory birds: a data mining study' for full methodology and preprocessing steps.
-
-# 
 # Output:
 #   - Updated dataset with angular deviations: 'Autumn_Deviation.csv'.
 

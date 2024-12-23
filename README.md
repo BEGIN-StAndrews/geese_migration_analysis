@@ -13,7 +13,7 @@ This folder annotates preprocessed data with environmental variables, including:
 - Coastal proximity data from NASA's Distance to Coast dataset.
 - Elevation data from ASTER GDEM dataset.
 
-Geomagnetic data annotation uses the [MagGeo Repository] (https://github.com/username/MagGeo), available separately on GitHub. Refer to the MagGeo repository for detailed geomagnetic data extraction methods.
+Geomagnetic data annotation uses the [MagGeo Repository] (https://github.com/MagGeo/MagGeo), available separately on GitHub. Refer to the MagGeo repository for detailed geomagnetic data extraction methods.
 
 ### 3. Autumn and 4. Spring:
 These folders contain workflows for seasonal analyses of autumn and spring migration data. Processes include movement parameter calculations, clustering feature extraction, and statistical analyses. Users of the final dataset can refer directly to these workflows for analysis without repeating preprocessing steps.

@@ -18,12 +18,12 @@
 #   - Summarizing time intervals by individual.
 # 
 # Input:
-#   - Annotated tracking data: 'Spring_Migration_Annotated.csv'.
+#   - Annotated tracking data: 'SpringAutumn_Migration_Annotated.csv'.
 
 # Note: 
-# The annotated datasets ('Autumn_Migration_Annotated.csv' and 'Spring_Migration_Annotated.csv')
-# along with identified 'Stopovers' are available in the Movebank study: 'Tracks of greater white-fronted
-# geese annotated with geomagnetic and environmental information.' 
+# The annotated datasets "SpringAutumn_Migration_Annotated.csv" is available in
+# the Movebank study: 'Tracks of greater white-fronted geese annotated with geomagnetic
+# and environmental information.'  
 # Refer to the Movebank Data Repository for access details and the published paper 
 # 'Multi-modal, interrelated navigation in migratory birds: a data mining study' for full methodology and preprocessing steps.
 
@@ -51,8 +51,10 @@ library(move)
 # ------------------------------------------------------------------------------
 rm(list = ls())
 
-# Reload the filtered dataset
-data <- read.csv("Spring_Migration_Annotated.csv")
+# Load annotated data
+annotatedData <- read.csv("SpringAutumn_Migration_Annotated.csv")
+
+data<- annotatedData[which(annotatedData$season=="spring migration"),] # Extracting spring migration data
 data$timePosix <- as.POSIXct(data$timestamp, format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
 
 

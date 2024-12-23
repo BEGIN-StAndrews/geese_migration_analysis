@@ -11,15 +11,7 @@
 # 
 # Input:
 #   - Processed tracking dataset with clustering features: 'Spring_ClusteringFeatures.csv'.
-#   - Stopover dataset: 'Stopovers.csv'.
-
-# Note: 
-# The annotated datasets ('Autumn_Migration_Annotated.csv' and 'Spring_Migration_Annotated.csv')
-# along with identified 'Stopovers' are available in the Movebank study: 'Tracks of greater white-fronted
-# geese annotated with geomagnetic and environmental information.' 
-# Refer to the Movebank Data Repository for access details and the published paper 
-# 'Multi-modal, interrelated navigation in migratory birds: a data mining study' for full methodology and preprocessing steps.
-
+#   - Stopover dataset: 'Stopovers.csv'.       # This dataset is produced during preprocessing.
 # 
 # Output:
 #   - Updated dataset with angular deviations: `Spring_Deviation.csv`.
@@ -31,14 +23,14 @@ if (!requireNamespace("geosphere", quietly = TRUE)) install.packages("geosphere"
 if (!requireNamespace("lubridate", quietly = TRUE)) install.packages("lubridate")
 
 library(dplyr)
-library(geosphere)    # For geographic calculations
-library(lubridate)    # For date-time manipulations
+library(geosphere)  
+library(lubridate)    
 
 # ------------------------------------------------------------------------------
 # Step 1: Load Data
 # ------------------------------------------------------------------------------
 # Load tracking data and stopover data
-tracking_data <- read.csv("Spring_ClusteringFeatures.csv") # 168786
+tracking_data <- read.csv("Spring_ClusteringFeatures.csv")
 stopovers <- read.csv("filtered_stopovers.csv")
 
 
