@@ -67,53 +67,64 @@ data2 <- na.omit(data1)
 
 
 
+
 # ------------------------------------------------------------------------------
 # Step 2: Calculate and Filter Time Intervals
 # ------------------------------------------------------------------------------
-# Calculate time intervals between GPS points
-data3 <- data2 %>%
-  group_by(idyear) %>%
+
+
+threshold <- 4    #
+
+final_data <- data2 %>%
+  group_by(individual.local.identifier) %>%
+  arrange(timePosix, .by_group = TRUE) %>%
+  mutate(
+    # We'll track the difference from the LAST KEPT point, not just the previous row.
+    time_diff_last_kept = c(NA, difftime(timePosix[-1], timePosix[-n()], units = "mins"))
+  ) %>%
+  # Use a simple R loop inside mutate or a cumulative approach:
+  mutate(
+    keep = {
+      keep_vec <- logical(n())
+      
+      # 1) Always keep first row
+      keep_vec[1] <- TRUE
+      
+      # 2) Track the "last kept" time
+      last_kept_time <- timePosix[1]
+      
+      for(i in seq(2, n())) {
+        gap <- as.numeric(difftime(timePosix[i], last_kept_time, units = "mins"))
+        if(gap >= threshold) {
+          # Keep this point
+          keep_vec[i] = TRUE
+          last_kept_time <- timePosix[i]
+        }
+      }
+      keep_vec
+    }
+  ) %>%
+  ungroup() %>%
+  filter(keep)
+
+# 'final_data' now has no two consecutive rows less than 4 minutes apart
+
+final_data <- final_data[, intersect(names(final_data), names(annotatedData))]
+
+write.csv(final_data, "Spring_Newinterval.csv", row.names = FALSE)
+
+
+
+testdata <- final_data %>%
+  group_by(individual.local.identifier) %>%
   mutate(time_interval = difftime(lead(timePosix), timePosix, units = 'mins'))
 
-# Filter out rows with missing time intervals (last points of trips)
-data_filtered3 <- data3 %>% filter(!is.na(time_interval))
+testdata <- testdata %>%
+  filter(!is.na(time_interval))
 
+min(testdata$time_interval)
 
-
-# Ensure consistent sampling intervals (minimum cumulative interval = 4 mins)
-newdata <- data.frame()
-newdata <- rbind(newdata, data_filtered3[1, ])
-flag_index <- 1
-i <- flag_index + 1
-
-# Retain data points where time intervals between fixes are >= 4 minutes
-while (i <= nrow(data_filtered3)) {
-  print(i)
-  if (data_filtered3$time_interval[i] >= 4) {
-    newdata <- rbind(newdata, data_filtered3[i, ])
-    flag_index <- i
-    i <- i + 1
-  } else {
-    cumulative_interval <- data_filtered3$time_interval[i]
-    j <- i + 1
-    while (cumulative_interval < 4 && j < nrow(data_filtered3)) {
-      cumulative_interval <- cumulative_interval + data_filtered3$time_interval[j]
-      j <- j + 1
-    }
-    if (cumulative_interval >= 4) {
-      newdata <- rbind(newdata, data_filtered3[i, ])
-      flag_index <- j
-      i <- j
-    } else {
-      break
-    }
-  }
-}
-
-
-write.csv(newdata, "Spring_Newinterval.csv", row.names = FALSE)
-
-
+###
 
 # ------------------------------------------------------------------------------
 # Step 3: Calculate Movement Parameters
@@ -142,10 +153,6 @@ rownames(track_df) <- NULL
 track_df$CalSpeed<- track_df$Calspeed2
 track_df$CalTurnAngle<- track_df$CalTurnangle2
 track_df$CalHeading<- track_df$CalHeading2
-track_df <- track_df[, -c(19:27)]
-track_df1 <- na.omit(track_df)
-
-
 
 
 # --------------------------------------------------------------------------
@@ -153,7 +160,7 @@ track_df1 <- na.omit(track_df)
 # --------------------------------------------------------------------------
 
 # Retain rows with speed > 1.6667 m/s (6 km/h)
-track_df2 <- track_df1 %>%
+track_df2 <- track_df %>%
   filter(CalSpeed > 1.6667) 
 
 # Calculate mean and standard deviation for speed
@@ -164,14 +171,14 @@ col_sd <- sd(track_df2$CalSpeed, na.rm = TRUE)
 z_scores <- abs((track_df2$CalSpeed - col_mean) / col_sd)
 
 # Retain non-outliers based on Z-scores (threshold = 3)
-df_filtered <- track_df2[z_scores <= 3, ] # 152392
-
+df_filtered <- track_df2[z_scores <= 3, ]
 
 
 
 # --------------------------------------------------------------------------
 # Step 5: Recalculate Movement Parameters Post-Filtering
 # --------------------------------------------------------------------------
+
 track_data2 <- move(x = df_filtered$location.long, y = df_filtered$location.lat,
                     time = as.POSIXct(df_filtered$timePosix, format = "%Y-%m-%d %H:%M:%S", tz = "UTC"),
                     proj = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"),
@@ -184,31 +191,35 @@ track_data2$CalHeading2 <- unlist(lapply(angle(track_data2), c, NA))
 
 # Convert to data frame and normalize headings to 0–360 degrees
 track_df2 <- as.data.frame(track_data2)
-
 convert_heading <- function(heading) {
   ifelse(heading < 0, heading + 360, heading)
 }
 
 track_df2$CalHeading2 <- convert_heading(track_df2$CalHeading2)
 
+
 # Simplify column names and remove unnecessary columns
 rownames(track_df2) <- NULL
 track_df2$CalSpeed<- track_df2$Calspeed2
 track_df2$CalTurnAngle<- abs(track_df2$CalTurnangle2)
 track_df2$CalHeading<- track_df2$CalHeading2
-track_df2 <- track_df2[, -c( 19:27)]
+
+track_df3 <- track_df2[, intersect(names(track_df2), names(filtered_data))]
+
 
 # Remove rows with NA in specified columns
-track_df2 <- na.omit(track_df2) 
+data_cleaned <- track_df3 %>%
+  filter(complete.cases(CalSpeed, CalTurnAngle, CalHeading))
 
 
 # Save the final processed dataset
-write.csv(track_df2, "Spring_FinalProcessed.csv", row.names = FALSE)
+write.csv(data_cleaned, "Spring_FinalProcessed.csv", row.names = FALSE)
 
 
 # --------------------------------------------------------------------------
 # Step 6: Summarize Time Intervals
 # --------------------------------------------------------------------------
+
 rm(list = ls())
 
 # Reload the processed data
@@ -226,6 +237,7 @@ interval_summary <- df_filtered %>%
   )
 
 print(interval_summary)
+
 
 # ------------------------------------------------------------------------------
 # End of Script

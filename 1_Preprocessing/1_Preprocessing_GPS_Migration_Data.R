@@ -79,11 +79,11 @@ filter_by_track_length <- function(data, threshold = 100) {
 # Function to remove outliers and individuals that changed population
 remove_outliers_and_south <- function(data) {
   # Combine all known outliers and south IDs, identified using QGIS
-  outlierIDs <- c("X474_KOL_F")
-  southIDs <- c("A25_KOL_F", "X62_Wolodja_J", "X20_Aleska_F", 
-                "GWFG_2015_424", "X85_KOL_F", "Lily_17", 
-                "X16_Clementina_F", "X15_Kamilla_F", 
-                "X22_Alissa_F", "X21_Kelemen_M")
+  outlierIDs <- c("474_KOL_F")
+  southIDs <- c("A25_KOL_F", "62_Wolodja_J", "20_Aleska_F", 
+                "GWFG_2015_424", "85_KOL_F", "Lily_17", 
+                "16_Clementina_F", "15_Kamilla_F", 
+                "22_Alissa_F", "21_Kelemen_M")
   
   combined_ids <- unique(c(outlierIDs, southIDs))
   
@@ -148,9 +148,9 @@ final_aggregated_data <- aggregated_data %>%
   filter(individual.taxon.canonical.name == "Anser albifrons")
 
 # Remove dependent individuals
-dependent_ids <- c("44_Adriana_F", "45_Adele_J", "X47_Adam_J", "50_Tina_J", 
-                   "53_Eva_F", "X56_Evita_J", "59_Wolka_F", "62_Wolodja_J", 
-                   "X67_Jasminka_J", "70_Janika_F", "83_Charlotta_J", "84_Charly_J", 
+dependent_ids <- c("44_Adriana_F", "45_Adele_J", "47_Adam_J", "50_Tina_J", 
+                   "53_Eva_F", "56_Evita_J", "59_Wolka_F", "62_Wolodja_J", 
+                   "67_Jasminka_J", "70_Janika_F", "83_Charlotta_J", "84_Charly_J", 
                    "48_Tineke_F", "46_Adriaan_J", "82_Chris_M")
 
 final_aggregated_data <- final_aggregated_data %>%
