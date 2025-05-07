@@ -42,5 +42,5 @@ For questions or issues, please contact:
 ## Citation:
 If you use this code, please cite the associated paper:  
 
-Moayedi, A., et al. *"Multi-modal, interrelated navigation in migratory birds: a data mining study", Ecological Informatics (2024). DOI: [Pending]  
+Moayedi, A., et al. *"Multi-modal, interrelated navigation in migratory birds: a data mining study", Ecological Informatics (2025). DOI: [Pending]  
 
