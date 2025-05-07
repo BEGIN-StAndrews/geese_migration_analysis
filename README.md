@@ -2,7 +2,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15358009.svg)](https://doi.org/10.5281/zenodo.15358009)
 
 ## Overview:
-This repository contains the scripts and workflows used in the study titled "Multi-modal, interrelated navigation in migratory birds: a data mining study." The workflow includes preprocessing GPS tracking data, annotating it with environmental and geomagnetic variables, clustering the data, and interpreting the results through statistical and visual analyses. The repository is designed to ensure the reproducibility of the methods described in the paper. The final annotated dataset has been made available in the Movebank Data Repository (Kölzsch et al. XX). 
+This repository contains the scripts and workflows used in the study titled "Multi-modal, interrelated navigation in migratory birds: a data mining study." The workflow includes preprocessing GPS tracking data, annotating it with environmental and geomagnetic variables, clustering the data, and interpreting the results through statistical and visual analyses. The repository is designed to ensure the reproducibility of the methods described in the paper. The dataset is currently under preparation for publication in the Movebank Data Repository, and its DOI will be provided upon completion.
 
 ## Repository Structure:
 ### 1. Preprocessing:
